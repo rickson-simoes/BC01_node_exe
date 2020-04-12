@@ -18,10 +18,10 @@ app.post("/repositories", (request, response) => {
 
   const repository = {
     id : uuid(),
-    title,
     url,
+    title,    
     techs,
-    likes
+    likes: 0
   };
 
   repositories.push(repository);
@@ -36,7 +36,7 @@ app.put("/repositories/:id", (request, response) => {
   const searchId = repositories.findIndex( f => f.id == id);
 
   if (searchId < 0) {
-    return response.status(404).json({ message : 'id not found'});
+    return response.status(400).json({ message : 'id not found'});
   }
 
   const likes = repositories[searchId].likes;
@@ -58,12 +58,12 @@ app.delete("/repositories/:id", (request, response) => {
   const searchId = repositories.findIndex( f => f.id == id);
 
   if (searchId < 0) {
-    return response.status(404).json({ message : 'id not found'});
+    return response.status(400).json({ message : 'id not found'});
   }
 
   repositories.splice(searchId, 1);
 
-  return response.status(200).json({ message : 'repository deleted'});
+  return response.status(204).json();
 });
 
 app.post("/repositories/:id/like", (request, response) => {
@@ -72,7 +72,7 @@ app.post("/repositories/:id/like", (request, response) => {
   const searchId = repositories.findIndex( f => f.id == id);
 
   if (searchId < 0) {
-    return response.status(404).json({ message : 'id not found'});
+    return response.status(400).json({ message : 'id not found'});
   }
 
   repositories[searchId].likes++;
